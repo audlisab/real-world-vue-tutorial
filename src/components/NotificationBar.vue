@@ -5,6 +5,7 @@
 >
 
 <script>
+  import {mapActions} from 'vuex'
 export default {
   props: {
     notification: {
@@ -12,11 +13,24 @@ export default {
       required: true
     }
   },
+  data() {
+      return {
+        timeout:  null
+      }
+    },
+  mounted() {
+      this.timeout = setTimeout(() => this.remove(this.notification), 5000)
+  },
+  beforeDestroy() {
+      clearTimeout(this.timeout)
+  },
   computed: {
+    // property
     notificationTypeClass() {
       return `-text-${this.notification.type}`
     }
   },
+  methods: mapActions(['remove']),
   name: 'NotificationBar'
 }
 </script>
@@ -26,3 +40,4 @@ export default {
   margin: 1em 0 1em;
 }
 </style>
+1

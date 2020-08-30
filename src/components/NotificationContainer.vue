@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="notification-container">
     <NotificationBar
       v-for="notification in notifications"
@@ -15,7 +15,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'NotificationContainer',
   components: { NotificationBar },
-  computed: mapState('notification', ['notifications'])
+  computed: mapState(['notifications'])
 }
 </script>
 

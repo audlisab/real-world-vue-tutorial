@@ -3,7 +3,8 @@ import EventService from '@/services/EventService.js'
 export const state = {
   event: {},
   events: [],
-  eventsTotal: 0
+  eventsTotal: 0,
+  perPage: 3
 }
 
 export const mutations = {
@@ -25,7 +26,8 @@ export const actions = {
   createEvent({ commit, dispatch }, event) {
     return EventService.postEvent(event)
       .then(() => {
-        commit('ADD_EVENT', event.data)
+        commit('ADD_EVENT', event)
+        commit('SET_EVENT', event)
         const notification = {
           type: 'success',
           message: 'Successfully created an event.'
@@ -35,14 +37,14 @@ export const actions = {
       .catch(error => {
         const notification = {
           type: 'error',
-          message: 'There was an error creating an event' + error.message
+          message: 'There was an error' + error.message
         }
         dispatch('add', notification, { root: true })
         throw error
       })
   },
-  fetchEvents({ commit, dispatch }, { perPage, page }) {
-    EventService.getEvents(perPage, page)
+  fetchEvents({ commit, dispatch, state }, { page }) {
+    return EventService.getEvents(state.perPage, page)
       .then(response => {
         commit('SET_EVENTS', response.data)
         commit('SET_EVENTS_TOTAL', response.headers['x-total-count'])
@@ -55,22 +57,18 @@ export const actions = {
         dispatch('add', notification, { root: true })
       })
   },
-  fetchEvent({ commit, dispatch }, id) {
+  fetchEvent({ commit }, id) {
     var event = this.getters.getEventById(id)
     if (event) {
       commit('SET_EVENT', event)
+      return event
     } else {
-      EventService.getEvent(id)
+      return EventService.getEvent(id)
         .then(response => {
           commit('SET_EVENT', response.data)
+          return response.data
         })
-        .catch(error => {
-          const notification = {
-            type: 'error',
-            message: 'There was an error' + error.message
-          }
-          dispatch('add', notification, { root: true })
-        })
+
     }
   }
 }

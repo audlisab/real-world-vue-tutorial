@@ -18,7 +18,6 @@ export const mutations = {
   }
 }
 
-// commit from the context object
 export const actions = {
   add({ commit }, notification) {
     commit('PUSH', notification)
