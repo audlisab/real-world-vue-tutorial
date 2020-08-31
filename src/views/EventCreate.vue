@@ -57,10 +57,6 @@
                             placeholder="Select a date"/>
             </div>
 
-<!--            <template v-if="$v.event.date.$error">-->
-<!--                <p v-if="!$v.event.date.required" class="errorMessage">-->
-<!--                    Date is required </p>-->
-<!--            </template>-->
 
             <BaseButton type="submit" buttonClass="-fill-gradient">
                 Submit
@@ -79,7 +75,6 @@
         components: {
             Datepicker
         },
-        computed: {},
         data() {
             const times = []
             for (let i = 1; i <= 24; i++) {
@@ -105,7 +100,7 @@
             createEvent() {
                 // make all the fields dirty
                 this.$v.$touch()
-                if (!$v.$invalid) {
+                if (!this.$v.$invalid) {
                     NProgress.start()
                     this.$store
                         .dispatch('createEvent', this.event)

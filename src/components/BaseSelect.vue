@@ -5,10 +5,10 @@
                 v-bind="$attrs"
                 v-on="$listeners"
                 :value="value"
-                @input="updateValue">
+                @change="updateValue">
         <option
                 v-for="option in options"
-                :key="option"
+                :key="option.id"
                 :value="option"
                 :selected="option === value">
             {{ option }}
@@ -18,22 +18,14 @@
 </template>
 
 <script>
+    import {formFieldMixin} from "../mixins/formFieldMixin";
+
     export default {
-        inheritAttrs: false,
+        mixins: [formFieldMixin],
         props: {
             options: {
                 type: Array,
                 required: true
-            },
-            label: {
-                type: String,
-                default: ''
-            },
-            value: [String, Number]
-        },
-        methods: {
-            updateValue(event) {
-                this.$emit('input', event.target.value)
             }
         },
         name: "BaseSelect"
